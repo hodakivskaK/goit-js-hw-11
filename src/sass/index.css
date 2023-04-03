@@ -1,0 +1,42 @@
+@import '~node_modules/modern-normalize/modern-normalize.css';
+button {
+  margin: 16px;
+  padding: 16px;
+  width: 100px;
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 15px 100px 15px 100px;
+  font-size: 12px;
+}
+
+button:hover {
+  cursor: pointer;
+  box-shadow: inset 0 0 5px 2px rgba(0, 0, 0, 0.3);
+}
+
+.load-more {
+  display: block;
+  margin: 12px auto;
+  background-color: rgb(2, 154, 196);
+  color: azure;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  height: 100px;
+  padding: 15px;
+  background-color: rgb(2, 154, 196);
+}
+
+input {
+  width: 300px;
+  height: 40px;
+  padding: 9px;
+  border-radius: 10px;
+}/*# sourceMappingURL=index.css.map */
