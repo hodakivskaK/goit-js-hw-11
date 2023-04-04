@@ -11,33 +11,50 @@ let NUMBER_PAGE = 1;
 const onSearchConstSubmit =  evn => {
   evn.preventDefault();
   clearMarkupGallery();
-  setTimeout(() => btnLoadMoreEl.classList.remove("is-hidden"), 1000);
+      btnLoadMoreEl.classList.add("is-hidden")
+
     searchQuery = evn.currentTarget.elements.searchQuery.value.trim();
     console.log(searchQuery);
 
     NUMBER_PAGE = 1;
     if (searchQuery.length === 0) {
-        return Notiflix.Notify.failure("Sorry..");
+        return Notiflix.Notify.failure("Sorry.. Please write anything");
+  }
+
+  fetchImages(searchQuery, NUMBER_PAGE).then(images => {
+    if (images === undefined) {
+      return
     }
-  fetchImages(searchQuery, NUMBER_PAGE).then(images => images.map(image => createMarkupGallery(image.webformatURL, image.tag, image.likes, image.views, image.comments, image.downloads)));  // image.tag, image.views, image.comments, image.downloads//
-  
+
+    images.hits.map(image => createMarkupGallery(image.webformatURL,
+    image.tag,
+    image.likes,
+    image.views,
+    image.comments,
+    image.downloads))
+    });
 }
 
 function onLoadMore() {
-    NUMBER_PAGE += 1;
+  NUMBER_PAGE += 1;
+  
+  fetchImages(searchQuery, NUMBER_PAGE).then(images => {
+    if (images.totalHits <= 40) {
+      Notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+      btnLoadMoreEl.classList.add("is-hidden");
+    }
 
-  fetchImages(searchQuery, NUMBER_PAGE).then(images =>
-        
-    images.map(image => createMarkupGallery(image.webformatURL, image.tag, image.likes, image.views, image.comments, image.downloads)));  // image.tag, image.views, image.comments, image.downloads//
-    
-    btnLoadMoreEl.classList.remove("is-hidden")
+    images.hits.map(image => createMarkupGallery(image.webformatURL,
+      image.tag,
+      image.likes,
+      image.views, image.comments, image.downloads))
+  }); 
 }
 
 searchFormEl.addEventListener("submit", onSearchConstSubmit)
 btnLoadMoreEl.addEventListener("click", onLoadMore)
-// , tag, likes, views, comments, downloads
+
 function createMarkupGallery(pageURL, tag, likes, views, comments, downloads) {
-  console.log(downloads)
    let markup =  `<div class="photo-card">
   <img src='${pageURL}' alt="${tag}" loading="lazy" />
   <div class="info">
@@ -56,11 +73,17 @@ function createMarkupGallery(pageURL, tag, likes, views, comments, downloads) {
     </p>
   </div>
 </div>`
-    
-    galleryBoxEl.insertAdjacentHTML("beforeend", markup)
+  
+  setTimeout(() => removeClassHidden(), 1000);
+  
+  galleryBoxEl.insertAdjacentHTML("beforeend", markup);
      
 }
 
 function clearMarkupGallery() {
   galleryBoxEl.innerHTML = ''; 
+}
+
+function removeClassHidden() {
+  btnLoadMoreEl.classList.remove("is-hidden");
 }

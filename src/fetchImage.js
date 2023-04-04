@@ -13,11 +13,13 @@ export const fetchImages = async (imageName, NUMBER_PAGE) => {
         }
         
         const imageJson = await imageResponse.json();
+       
         if (imageJson.total === 0) {
             throw new Error(Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again."))
+            
         }
         
-        return await imageJson.hits;
+        return await imageJson;
         
     } catch {
         
